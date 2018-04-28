@@ -1,0 +1,25 @@
+{
+  "name": "web-scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PiggySpeed/web-scraper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PiggySpeed/web-scraper/issues"
+  },
+  "homepage": "https://github.com/PiggySpeed/web-scraper#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "http-server": "^0.11.1",
+    "parse5": "^4.0.0"
+  }
+}
