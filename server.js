@@ -2,19 +2,36 @@ const https = require('https');
 const http = require('http');
 const processHtml = require('./src/processor.js');
 
+const httpOptions = {
+  cmu: {
+    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    protocol: 'https:',
+    host: 'csd.cs.cmu.edu',
+    path: '/directory/faculty'
+  },
+  harvard: {
+    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    protocol: 'https:',
+    host: 'www.seas.harvard.edu',
+    path: '/computer-science/people'
+  }
+};
+
 function serveHTML(data) {
 
   // build html
   const header = `<meta charset="utf-8">`;
 
   const body = data.reduce((acc, curr) => {
-    return acc + `<p><span>${curr.name}</span> <a href=${curr.url}>${curr.url}</a></p>`
+    let elem = acc + `<p><span>${curr.name}</span>`;
+    for (let url of curr.urls) {
+      elem += ` <a href=${curr.url}>${url}</a></p>`;
+    }
+    return elem;
   }, "");
 
   const html = '<!DOCTYPE html>'
     + '<html><header>' + header + '</header><body>' + body + '</body></html>';
-
-  console.log('received data ', html);
 
   // set up server
   http.createServer(function(req, res) {
@@ -27,19 +44,8 @@ function serveHTML(data) {
 }
 
 function main() {
-  const headers = {
-    'Content-Type': 'text/html; charset=utf-8'
-  };
-
-  const options = {
-    headers: headers,
-    protocol: 'https:',
-    host: 'csd.cs.cmu.edu',
-    path: '/directory/faculty'
-  };
-
   try {
-    https.get(options, function(res) {
+    https.get(httpOptions.harvard, function(res) {
       console.log(res.statusCode);
       res.setEncoding('utf8');
 

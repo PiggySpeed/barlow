@@ -2,7 +2,7 @@ const https = require('https');
 
 async function throttledRequests(paths, baseOptions) {
   let n = 0;
-  const TIMEOUT = 750;
+  const TIMEOUT = 500;
   let accumulator = Promise.resolve([]);
 
   const results = [];

@@ -1,12 +1,13 @@
 const Parser = require('./parser');
 
 async function processHtml(html, cb) {
-  const cmu = new Parser(html);
+  const parser = new Parser(html);
 
-  await cmu.parseCMU();
+  // await cmu.parseCMU();
+  await parser.parseHarvard();
 
   console.log('sending result...');
-  cb(cmu.result);
+  cb(parser.result);
 }
 
 module.exports = processHtml;
