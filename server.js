@@ -11,7 +11,7 @@ function serveHTML(data) {
   const body = data.reduce((acc, curr) => {
     let elem = acc + `<p><span>${curr.name}</span>`;
     for (let url of curr.urls) {
-      elem += ` <a href=${curr.url}>${url}</a></p>`;
+      elem += ` <a href=${url}>${url}</a></p>`;
     }
     return elem;
   }, '');
@@ -29,8 +29,12 @@ function serveHTML(data) {
 
 }
 
+/**
+ * Notes:
+ * - excludes faculty without personal websites
+ * **/
 function main() {
-  const school = 'cmu';
+  const school = 'stanford';
 
   try {
     https.get(schools[school], function(res) {

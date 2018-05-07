@@ -1,41 +1,29 @@
 const parse5 = require('parse5');
-const schools = require('../config/schools');
 const { findNodes } = require('../utils/parser_helpers');
-const { throttleRequests } = require('../utils/request_helpers');
 
 async function parseStanford() {
-  const harvard = parse5.parse(this.raw);
-  const root = schools.harvard.protocol + '//' + schools.harvard.host;
-  const tableRows = findNodes(harvard, 'div', { 'class': 'views-field views-field-nothing-1'});
-
-  let paths = [];
-  for (let row of tableRows) {
-    let link = findNodes(row, 'a')[0].attrs[0].value.toString().trim();
-    link = link.split(root).join("");
-    paths.push(link);
-    console.log(link);
+  const html = parse5.parse(this.raw);
+  const tables = findNodes(html, 'tbody');
+  // Stanford has multiple tables of faculty members on the same page
+  let tableRows = [];
+  for (let table of tables) {
+    const rows = findNodes(table, 'tr');
+    rows.shift(); // remove the header row
+    tableRows = tableRows.concat(rows);
   }
 
   const sites = [];
-  paths = paths.slice(0, 5);
-  const profiles = await throttleRequests(paths, { headers, protocol, host } = schools.cmu);
-  for (let profile of profiles) {
-    const root = parse5.parse(profile);
-    const websiteContainer = findNodes(root, 'div', { 'class': 'views-field views-field-field-website' })[0];
-    const websites = findNodes(websiteContainer, 'a');
+  for (let row of tableRows) {
+    const node = findNodes(row, 'a')[0];
 
-    if (websites.length > 0) {
-      const information = findNodes(root, 'div', { 'class': 'views-field views-field-title' })[0];
-      let name = findNodes(information, 'h1')[0].childNodes[0].value.toString().trim();
-      name = name.replace(/(.+)\s+(\w+)/, '$2, $1');
-
-      const urls = [];
-      for (let website of websites) {
-        const url = website.attrs[0].value.toString().trim();
-        urls.push(url);
-      }
-      sites.push({ name, urls });
+    if (!node) {
+      continue;
     }
+
+    const link = node.attrs[0].value.toString().trim();
+    const name = node.childNodes[0].value.toString().trim().replace(/(\w+)\s+(\w+)/, "$2, $1");
+    // Stanford only has one website per faculty member
+    sites.push({ name, urls: [link] });
   }
 
   this.result = sites;

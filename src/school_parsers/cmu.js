@@ -4,9 +4,9 @@ const { findNodes } = require('../utils/parser_helpers');
 const { throttleRequests } = require('../utils/request_helpers');
 
 async function parseCMU() {
-  const cmu = parse5.parse(this.raw);
+  const html = parse5.parse(this.raw);
   const root = schools.cmu.protocol + '//' + schools.cmu.host;
-  const table = findNodes(cmu, "table");
+  const table = findNodes(html, "table");
   const tableRows = findNodes(table[0], "td", { "class": "views-field views-field-field-computed-last-name"});
 
   const paths = [];

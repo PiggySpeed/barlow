@@ -4,9 +4,9 @@ const { findNodes } = require('../utils/parser_helpers');
 const { throttleRequests } = require('../utils/request_helpers');
 
 async function parseHarvard() {
-  const harvard = parse5.parse(this.raw);
+  const html = parse5.parse(this.raw);
   const root = schools.harvard.protocol + '//' + schools.harvard.host;
-  const tableRows = findNodes(harvard, "div", { "class": "views-field views-field-nothing-1"});
+  const tableRows = findNodes(html, "div", { "class": "views-field views-field-nothing-1"});
 
   const paths = [];
   for (let row of tableRows) {

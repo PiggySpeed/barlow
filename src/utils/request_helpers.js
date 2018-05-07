@@ -42,5 +42,4 @@ function sendRequest(options) {
   });
 }
 
-
 module.exports = { throttleRequests };
