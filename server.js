@@ -14,6 +14,12 @@ const httpOptions = {
     protocol: 'https:',
     host: 'www.seas.harvard.edu',
     path: '/computer-science/people'
+  },
+  stanford: {
+    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    protocol: 'https:',
+    host: 'cs.stanford.edu',
+    path: '/directory/faculty'
   }
 };
 
@@ -28,33 +34,36 @@ function serveHTML(data) {
       elem += ` <a href=${curr.url}>${url}</a></p>`;
     }
     return elem;
-  }, "");
+  }, '');
 
   const html = '<!DOCTYPE html>'
     + '<html><header>' + header + '</header><body>' + body + '</body></html>';
 
   // set up server
   http.createServer(function(req, res) {
+    console.log('listening at port 8080...');
     res.writeHead(200, {
       'Content-Type': 'text/html'
     });
     res.end(html);
-  }).listen("8080");
+  }).listen('8080');
 
 }
 
 function main() {
+  const school = 'stanford';
+
   try {
-    https.get(httpOptions.harvard, function(res) {
+    https.get(httpOptions[school], function(res) {
       console.log(res.statusCode);
       res.setEncoding('utf8');
 
-      let rawData = "";
+      let rawData = '';
       res.on('data', (chunk) => {
         rawData += chunk;
       });
       res.on('end', () => {
-        processHtml(rawData, serveHTML);
+        processHtml(rawData, school, serveHTML);
       })
 
     });

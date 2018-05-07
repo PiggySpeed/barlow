@@ -1,6 +1,6 @@
 const https = require('https');
 
-async function throttledRequests(paths, baseOptions) {
+async function throttleRequests(paths, baseOptions) {
   let n = 0;
   const TIMEOUT = 500;
   let accumulator = Promise.resolve([]);
@@ -22,13 +22,13 @@ async function throttledRequests(paths, baseOptions) {
   return results;
 }
 
-// helpers
+// Private functions
 function sendRequest(options) {
   return new Promise((resolve, reject) => {
     https.get(options, function(res) {
       res.setEncoding('utf8');
 
-      let rawData = "";
+      let rawData = '';
       res.on('data', (chunk) => {
         rawData += chunk;
       });
@@ -42,4 +42,5 @@ function sendRequest(options) {
   });
 }
 
-module.exports = throttledRequests;
+
+module.exports = { throttleRequests };
