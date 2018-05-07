@@ -1,27 +1,7 @@
 const https = require('https');
 const http = require('http');
-const processHtml = require('./src/processor.js');
-
-const httpOptions = {
-  cmu: {
-    headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    protocol: 'https:',
-    host: 'csd.cs.cmu.edu',
-    path: '/directory/faculty'
-  },
-  harvard: {
-    headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    protocol: 'https:',
-    host: 'www.seas.harvard.edu',
-    path: '/computer-science/people'
-  },
-  stanford: {
-    headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    protocol: 'https:',
-    host: 'cs.stanford.edu',
-    path: '/directory/faculty'
-  }
-};
+const processHtml = require('./src/processor');
+const schools = require('./src/config/schools');
 
 function serveHTML(data) {
 
@@ -41,7 +21,6 @@ function serveHTML(data) {
 
   // set up server
   http.createServer(function(req, res) {
-    console.log('listening at port 8080...');
     res.writeHead(200, {
       'Content-Type': 'text/html'
     });
@@ -51,10 +30,10 @@ function serveHTML(data) {
 }
 
 function main() {
-  const school = 'stanford';
+  const school = 'cmu';
 
   try {
-    https.get(httpOptions[school], function(res) {
+    https.get(schools[school], function(res) {
       console.log(res.statusCode);
       res.setEncoding('utf8');
 

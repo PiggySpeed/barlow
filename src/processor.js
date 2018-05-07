@@ -5,7 +5,7 @@ async function processHtml(html, school, cb) {
 
   await parser.parse();
 
-  console.log('sending result...');
+  console.log('sending result to port 8080...');
   cb(parser.result);
 }
 

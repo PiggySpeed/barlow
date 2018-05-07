@@ -1,33 +1,24 @@
 const parse5 = require('parse5');
+const schools = require('../config/schools');
 const { findNodes } = require('../utils/parser_helpers');
 const { throttleRequests } = require('../utils/request_helpers');
 
 async function parseCMU() {
   const cmu = parse5.parse(this.raw);
-  const root = /(https:\/\/csd\.cs\.cmu\.edu)/g;
+  const root = schools.cmu.protocol + '//' + schools.cmu.host;
   const table = findNodes(cmu, "table");
   const tableRows = findNodes(table[0], "td", { "class": "views-field views-field-field-computed-last-name"});
 
   const paths = [];
   for (let row of tableRows) {
     let link = findNodes(row, "a")[0].attrs[0].value.toString().trim();
-    link = link.replace(root, "");
+    link = link.split(root).join("");
     paths.push(link);
     console.log(link);
   }
 
-  const headers = {
-    'Content-Type': 'text/html; charset=utf-8'
-  };
-
-  const baseOptions = {
-    headers: headers,
-    protocol: 'https:',
-    host: 'csd.cs.cmu.edu'
-  };
-
   const sites = [];
-  const profiles = await throttleRequests(paths, baseOptions);
+  const profiles = await throttleRequests(paths, { headers, protocol, host } = schools.cmu);
   for (let profile of profiles) {
     const root = parse5.parse(profile);
     const websites = findNodes(root, "a", { title: "Personal Website" });
