@@ -34,7 +34,7 @@ function serveHTML(data) {
  * - excludes faculty without personal websites
  * **/
 function main() {
-  const school = 'stanford';
+  const school = 'berkeley';
 
   try {
     https.get(schools[school], function(res) {
