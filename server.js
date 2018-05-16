@@ -38,7 +38,7 @@ function main() {
 
   try {
     https.get(schools[school], function(res) {
-      console.log(res);
+      console.log(res.statusCode);
       res.setEncoding('utf8');
 
       let rawData = '';

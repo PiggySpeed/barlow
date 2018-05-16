@@ -13,7 +13,6 @@ async function parseUPenn() {
   const table = findNodes(html, 'tbody');
   const links = findNodes(table[0], 'a', {'class': 'media-heading'});
   const test = links.filter(areWebsites).slice(0, 5);
-  console.log('start', this.raw);
   console.log(test);
   return;
 
