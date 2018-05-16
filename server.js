@@ -34,11 +34,11 @@ function serveHTML(data) {
  * - excludes faculty without personal websites
  * **/
 function main() {
-  const school = 'berkeley';
+  const school = 'upenn';
 
   try {
     https.get(schools[school], function(res) {
-      console.log(res.statusCode);
+      console.log(res);
       res.setEncoding('utf8');
 
       let rawData = '';
@@ -47,8 +47,7 @@ function main() {
       });
       res.on('end', () => {
         processHtml(rawData, school, serveHTML);
-      })
-
+      });
     });
   } catch (err) {
     console.log(err);

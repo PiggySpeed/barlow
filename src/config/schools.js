@@ -22,6 +22,12 @@ const schools = {
     protocol: 'https:',
     host: 'www2.eecs.berkeley.edu',
     path: '/Faculty/Lists/CS/faculty.html'
+  },
+  upenn: {
+    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    protocol: 'https:',
+    host: 'www.cis.upenn.edu',
+    path: '/about-people/index.php'
   }
 };
 
