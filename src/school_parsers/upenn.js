@@ -1,7 +1,6 @@
 const parse5 = require('parse5');
 const schools = require('../config/schools');
 const { findNodes } = require('../utils/parser_helpers');
-const { throttleRequests } = require('../utils/request_helpers');
 
 function hasLinks(elem) {
   return elem && elem.childNodes.length > 0;
@@ -11,9 +10,16 @@ function areWebsites(elem) {
   return elem.childNodes[0].value.toString().match(/(Website)/);
 }
 
-function extractURL(elem) {
+function extractAndFixURL(elem) {
   // assumes elem is a valid website anchor node
-  return elem.attrs[0].value.toString().trim();
+  const root = schools.upenn.protocol + '//' + schools.upenn.host;
+  let url = elem.attrs[0].value.toString().trim();
+
+  if (url.substring(0, 3) === '../') {
+    url = url.replace('..', root);
+  }
+
+  return url;
 }
 
 async function parseUPenn() {
@@ -43,7 +49,7 @@ async function parseUPenn() {
     urls = urls
       .filter(hasLinks)
       .filter(areWebsites)
-      .map(extractURL);
+      .map(extractAndFixURL);
 
     profiles.push({ name, urls });
   }

@@ -30,7 +30,7 @@ const schools = {
     },
     protocol: 'https:',
     method: 'GET',
-    hostname: 'www.cis.upenn.edu',
+    host: 'www.cis.upenn.edu',
     path: '/about-people/'
   }
 };
